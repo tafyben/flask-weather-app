@@ -6,11 +6,15 @@ import os
 load_dotenv()
 api_key = os.getenv('API_KEY')
 
+
 # define class object
 
 @dataclass
 class WeatherData:
-    pass
+    main: str
+    description: str
+    icon: str
+    temperature: float
 
 
 
@@ -23,10 +27,19 @@ def get_lat_lon(city_name, state_code, country_code, api_keys):
 
 
 def get_current_weather(lat, lon, api_keys):
-    resp = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_keys}').json()
-    print(resp)
+    resp = requests.get(
+        f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_keys}&units=metric').json()
+    data = WeatherData(
+        main=resp.get('weather')[0].get('main'),
+        description=resp.get('weather')[0].get('description'),
+        icon=resp.get('weather')[0].get('icon'),
+        temperature=resp.get('main').get('temp')
+    )
+
+    return data
+
 
 
 if __name__ == '__main__':
     lat, lon = get_lat_lon('Toronto', 'ON', 'Canada', api_key)
-    get_current_weather(lat, lon, api_key)
+    print(get_current_weather(lat, lon, api_key))
