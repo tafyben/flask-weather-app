@@ -38,7 +38,7 @@ def get_current_weather(lat, lon, api_keys):
 
     return data
 
-
+# main, note the data inside lat, lon is just temporary
 def main(city_name, state_code, country_code):
     lat, lon = get_lat_lon('Toronto', 'ON', 'Canada', api_key)
     weather_data = get_current_weather(lat, lon, api_key)
